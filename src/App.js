@@ -1,9 +1,11 @@
+
 class BugList extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            value: null,
-        };
+        this.bugData = [
+            {id:0, priority:'New', status:'Normal', owner:'Chris', title:'Update css file'},
+            {id:1, priority:'New', status:'Critical', owner:'Jeff', title:'Add submit bug form'}
+        ];
     }
 
     render() {
@@ -12,7 +14,7 @@ class BugList extends React.Component {
                 <h1>Bug Tracker</h1>
                 <BugFilter />
                 <hr />
-                <BugTable />
+                <BugTable bugs={this.bugData}/>
                 <hr />
                 <BugAdd />
             </div>
@@ -35,10 +37,13 @@ class BugFilter extends React.Component {
 class BugTable extends React.Component {
     constructor(props) {
         super(props);
+        this.bugRows = this.props.bugs.map(function(bug) {
+            return <BugRow key={bug.id} id={bug.id} status={bug.status} priority={bug.priority} owner={bug.owner} title={bug.title}/>
+        });
     }
 
-    renderRow(id, status, priority, owner, title) {
-        return <BugRow id={id} status={status} priority={priority} owner={owner} title={title}/>
+    renderRow(bug) {
+        return <BugRow key={bug.id} id={bug.id} status={bug.status} priority={bug.priority} owner={bug.owner} title={bug.title}/>
     }
 
     render() {
@@ -52,8 +57,9 @@ class BugTable extends React.Component {
                         <th>OWNER</th>
                         <th>TITLE</th>
                     </tr>
-                    {this.renderRow(0, 'New', 'Normal', 'Chris', 'Update css file')}
-                    {this.renderRow(1, 'New', 'Critical', 'Jeff', 'Add submit bug form')}
+                    <tbody>
+                        {this.bugRows}
+                    </tbody>
                 </table>
             </div>
         );
